@@ -2,6 +2,8 @@ import sys
 
 from qtpy.QtWidgets import QMainWindow, QApplication, QWidget, QVBoxLayout
 
+import qtemoji
+
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -9,6 +11,8 @@ class MainWindow(QMainWindow):
 
         self.widget = QWidget(self)
         self.setCentralWidget(self.widget)
+
+        print(next(iter(qtemoji.EMOJI_DATA.items())))
 
         self.widget.setLayout(QVBoxLayout())
 
