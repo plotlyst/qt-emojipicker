@@ -53,6 +53,14 @@ print(len(_PEOPLE_EMOJIES))
 print(len(_ANIMALS_AND_NATURE_EMOJIES))
 
 
+class EmojiPicker(QWidget):
+    def __init__(self, parent=None):
+        super(EmojiPicker, self).__init__(parent)
+        vbox(self)
+        self._emojiView = EmojiView(self)
+        self.layout().addWidget(self._emojiView)
+
+
 class EmojiView(QScrollArea):
     def __init__(self, parent=None):
         super(EmojiView, self).__init__(parent)
@@ -81,8 +89,8 @@ class EmojiView(QScrollArea):
         _widget = QWidget(self)
         _widget.setFont(self._emojiFont)
         flow(_widget, 2, 5)
-        for emoji in emojis:
-            _widget.layout().addWidget(_EmojiLabel(emoji, self))
+        for _emoji in emojis:
+            _widget.layout().addWidget(_EmojiLabel(_emoji, self))
         self._layout.addWidget(_widget)
 
 
