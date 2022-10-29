@@ -53,6 +53,8 @@ _ANIMALS_AND_NATURE_EMOJIES = [
 
 print(len(_PEOPLE_EMOJIES))
 print(len(_ANIMALS_AND_NATURE_EMOJIES))
+print('-----')
+print(len(_PEOPLE_EMOJIES) + len(_ANIMALS_AND_NATURE_EMOJIES))
 
 
 class EmojiCategory(Enum):
@@ -82,11 +84,14 @@ class EmojiPicker(QWidget):
         self.layout().addWidget(self._emojiView)
 
         self._addCategoryFilter(EmojiCategory.PEOPLE)
+        self._addCategoryFilter(EmojiCategory.ANIMALS_NATURE)
 
     def _addCategoryFilter(self, category: EmojiCategory):
         btnFilter = _EmojiCategoryButton()
         if category == EmojiCategory.PEOPLE:
             btnFilter.setIcon(qtawesome.icon('fa5.smile'))
+        elif category == EmojiCategory.ANIMALS_NATURE:
+            btnFilter.setIcon(qtawesome.icon('fa5s.dog'))
 
         btnFilter.clicked.connect(lambda: self._emojiView.scrollToCategory(category))
         self._toolbar.layout().addWidget(btnFilter)
@@ -113,10 +118,9 @@ class EmojiView(QScrollArea):
         self._addEmojis(self._lblAnimals, _ANIMALS_AND_NATURE_EMOJIES)
 
     def scrollToCategory(self, category: EmojiCategory):
-        if category == EmojiCategory.PEOPLE:
-            self.ensureWidgetVisible(self._lblPerson)
-        elif category == EmojiCategory.ANIMALS_NATURE:
-            self.ensureWidgetVisible(self._lblAnimals)
+        lbl = self._label(category)
+        if lbl:
+            self.verticalScrollBar().setValue(lbl.pos().y())
 
     def _addEmojis(self, title: QLabel, emojis: List[str]):
         incr_font(title)
@@ -128,6 +132,12 @@ class EmojiView(QScrollArea):
         for _emoji in emojis:
             _widget.layout().addWidget(_EmojiLabel(_emoji, self))
         self._layout.addWidget(_widget)
+
+    def _label(self, category: EmojiCategory):
+        if category == EmojiCategory.PEOPLE:
+            return self._lblPerson
+        elif category == EmojiCategory.ANIMALS_NATURE:
+            return self._lblAnimals
 
 
 class _EmojiLabel(QLabel):
