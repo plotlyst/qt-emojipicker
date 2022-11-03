@@ -160,6 +160,8 @@ class _EmojiCategoryButton(QToolButton):
 
 
 class EmojiPicker(QWidget):
+    emojiPicked = Signal(str)
+
     def __init__(self, parent=None):
         super(EmojiPicker, self).__init__(parent)
         vbox(self)
@@ -171,7 +173,7 @@ class EmojiPicker(QWidget):
         self._toolbar = QWidget(self)
         hbox(self._toolbar)
 
-        self._emojiView = EmojiView(self)
+        self._emojiView = EmojiView(self.emojiPicked, self)
 
         self.layout().addWidget(self._toolbar)
         self.layout().addWidget(self._emojiView)
@@ -209,8 +211,9 @@ class EmojiPicker(QWidget):
 
 
 class EmojiView(QScrollArea):
-    def __init__(self, parent=None):
+    def __init__(self, signal, parent=None):
         super(EmojiView, self).__init__(parent)
+        self._signal = signal
         self._emojiFont = QFont('Noto Emoji')
         self._emojiFont.setPointSize(self._emojiFont.pointSize() + 6)
         self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
@@ -252,7 +255,7 @@ class EmojiView(QScrollArea):
         _widget.setFont(self._emojiFont)
         flow(_widget, 2, 5)
         for _emoji in emojis:
-            _widget.layout().addWidget(_EmojiLabel(_emoji, self))
+            _widget.layout().addWidget(_EmojiLabel(_emoji, self._signal, self))
         self._layout.addWidget(_widget)
 
     def _label(self, category: EmojiCategory):
@@ -275,11 +278,10 @@ class EmojiView(QScrollArea):
 
 
 class _EmojiLabel(QLabel):
-    clicked = Signal(str)
-
-    def __init__(self, emoji_: str, parent=None):
+    def __init__(self, emoji_: str, signal, parent=None):
         super(_EmojiLabel, self).__init__(emoji_, parent)
         self._emoji = emoji_
+        self._signal = signal
         pointy(self)
         self.setAutoFillBackground(True)
         self._greyPalette = QPalette()
@@ -298,4 +300,4 @@ class _EmojiLabel(QLabel):
 
     def mouseReleaseEvent(self, QMouseEvent):
         incr_font(self)
-        self.clicked.emit(self._emoji)
+        self._signal.emit(self._emoji)
