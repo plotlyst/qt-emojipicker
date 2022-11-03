@@ -255,7 +255,7 @@ class EmojiView(QScrollArea):
         _widget.setFont(self._emojiFont)
         flow(_widget, 2, 5)
         for _emoji in emojis:
-            _widget.layout().addWidget(_EmojiLabel(_emoji, self._signal, self))
+            _widget.layout().addWidget(_EmojiLabel(_emoji, self._signal, self._emojiFont, self))
         self._layout.addWidget(_widget)
 
     def _label(self, category: EmojiCategory):
@@ -278,9 +278,10 @@ class EmojiView(QScrollArea):
 
 
 class _EmojiLabel(QLabel):
-    def __init__(self, emoji_: str, signal, parent=None):
+    def __init__(self, emoji_: str, signal, font: QFont, parent=None):
         super(_EmojiLabel, self).__init__(emoji_, parent)
         self._emoji = emoji_
+        self.setFont(font)
         self._signal = signal
         pointy(self)
         self.setAutoFillBackground(True)
