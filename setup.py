@@ -9,6 +9,8 @@ with (HERE / 'README.md').open('rt') as fh:
 REQUIREMENTS: dict = {
     'core': [
         'qtpy',
+        'emoji',
+        'qtawesome',
     ],
     'test': [
         'pytest',
@@ -23,7 +25,7 @@ REQUIREMENTS: dict = {
 }
 
 setup(
-    name='',
+    name='qt-emojipicker',
     version='0.1.0',
 
     author='Zsolt Kovari',

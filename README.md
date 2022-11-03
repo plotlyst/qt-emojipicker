@@ -1,1 +1,1 @@
-# qt library
+# qt emoji-picker
